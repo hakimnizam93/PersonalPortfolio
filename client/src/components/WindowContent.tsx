@@ -1,5 +1,6 @@
 import { Gamepad2, FileText, FolderOpen } from 'lucide-react';
 import { useState } from 'react';
+import { OregonTrail } from './games/OregonTrail';
 
 interface WindowContentProps {
   component: string;
@@ -182,26 +183,30 @@ export function WindowContent({ component, onOpenApp }: WindowContentProps) {
         <Gamepad2 size={48} className="text-muted-foreground/30 mb-6" />
         <h2 className="text-2xl font-light mb-3 text-foreground">Games</h2>
         <p className="text-center mb-8 text-muted-foreground text-sm max-w-md">
-          Ready for a break? DOOM and Oregon Trail coming soon.
+          Ready for a break? Choose a game to play.
         </p>
         <div className="space-y-3 w-64">
-          <button 
-            onClick={() => console.log('DOOM clicked')}
+          <button
+            onClick={() => onOpenApp({ id: 'oregon-trail', title: 'Oregon Trail', component: 'OregonTrail' })}
             className="w-full px-6 min-h-9 bg-foreground text-background text-sm rounded-lg hover-elevate active-elevate-2 transition-colors"
-            data-testid="button-doom"
-          >
-            DOOM
-          </button>
-          <button 
-            onClick={() => console.log('Oregon Trail clicked')}
-            className="w-full px-6 min-h-9 bg-muted text-foreground text-sm rounded-lg hover-elevate active-elevate-2 transition-colors"
             data-testid="button-oregon-trail"
           >
             Oregon Trail
           </button>
+          <button
+            onClick={() => console.log('DOOM coming soon')}
+            className="w-full px-6 min-h-9 bg-muted text-foreground text-sm rounded-lg hover-elevate active-elevate-2 transition-colors opacity-50 cursor-not-allowed"
+            data-testid="button-doom"
+          >
+            DOOM (Coming Soon)
+          </button>
         </div>
       </div>
     );
+  }
+
+  if (component === 'OregonTrail') {
+    return <OregonTrail />;
   }
   
   if (component === 'Folder') {
