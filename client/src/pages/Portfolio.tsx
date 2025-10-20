@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Folder, Mail, Briefcase, Gamepad2, FileText } from 'lucide-react';
+import { Folder, Mail, Briefcase, Gamepad2, FileText, MessageCircle } from 'lucide-react';
 import { MenuBar } from '@/components/MenuBar';
 import { Window } from '@/components/Window';
 import { Dock } from '@/components/Dock';
@@ -50,10 +50,10 @@ export default function Portfolio() {
 
   const apps = [
     { id: 'work', title: 'Work', icon: Briefcase, component: 'Work' },
-    { id: 'projects', title: 'Projects', icon: Folder, component: 'Projects' },
-    { id: 'resume', title: 'Resume', icon: FileText, component: 'Resume' },
+    { id: 'folder', title: 'Folder', icon: Folder, component: 'Folder' },
     { id: 'games', title: 'Games', icon: Gamepad2, component: 'Games' },
-    { id: 'contact', title: 'Contact', icon: Mail, component: 'Contact' }
+    { id: 'contact', title: 'Contact', icon: Mail, component: 'Contact' },
+    { id: 'chat', title: 'AI Assistant', icon: MessageCircle, component: 'Chat' }
   ];
 
   const openApp = (app: { id: string; title: string; component: string }) => {

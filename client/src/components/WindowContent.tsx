@@ -1,4 +1,4 @@
-import { Gamepad2 } from 'lucide-react';
+import { Gamepad2, FileText, FolderOpen } from 'lucide-react';
 import { useState } from 'react';
 
 interface WindowContentProps {
@@ -43,17 +43,17 @@ export function WindowContent({ component, onOpenApp }: WindowContentProps) {
         <h2 className="text-2xl font-light mb-8 text-foreground">About</h2>
         <div className="space-y-6 text-muted-foreground leading-relaxed max-w-2xl">
           <p>
-            I'm a Kuala Lumpur-based design leader with 5 years of experience taking things apart and figuring out how they tick. That curiosity translates into crafting user experiences that matter.
+            I'm a Kuala Lumpur-based Design Manager with 6 years of experience leading teams to develop innovative solutions for process improvement in large organizations. Skilled in using Atlassian, Miro, and complex ecosystems to enhance workflow.
           </p>
           <p>
-            Currently at ServiceRocket, working to become the most reliable Atlassian partner for thousands of businesses worldwide. I also lead the team at Zensite, a top UX agency across Singapore and Malaysia.
+            Recently nominated for Miro's People Partner Choice award and dedicated to nurturing design talent through a self-developed career framework.
           </p>
           <p className="text-sm text-muted-foreground/70">
-            Active in design leadership communities, staying connected to evolving product trends and debates.
+            As a Top 1% ADPList Mentor, I help designers navigate career growth, portfolio reviews, and leadership transitions while staying connected to evolving product trends and design leadership communities.
           </p>
           
           <div className="pt-8 space-y-4 border-t border-border mt-10">
-            <h3 className="text-lg font-light text-foreground mb-6">Principles</h3>
+            <h3 className="text-lg font-light text-foreground mb-6">Core Values</h3>
             <div className="space-y-5">
               {[
                 { title: 'People First', desc: 'Understanding needs and motivations is the foundation' },
@@ -80,25 +80,41 @@ export function WindowContent({ component, onOpenApp }: WindowContentProps) {
         <div className="space-y-8 max-w-2xl">
           {[
             {
+              company: 'ZUS Coffee',
+              role: 'Regional Design Lead',
+              period: 'May 2025 - Sep 2025',
+              desc: 'Led and managed the entire design function including research, ideation, testing and implementation. Managed all UI and UX of ZUS Coffee mobile app, Back Office and Zurista App.'
+            },
+            {
               company: 'ServiceRocket',
-              role: 'Design Leader',
-              desc: 'Leading user experience initiatives for enterprise Atlassian solutions, helping thousands of businesses worldwide work more efficiently.'
+              role: 'Design Manager (HOD)',
+              period: 'Jan 2023 - May 2025',
+              desc: 'Spearheaded ServiceRocket Design department, delivering seamless user experience across all touchpoints. Built a high-performing design team achieving 322% increase in team efficiency, 75% increase in individual designer productivity. Nominated for Miro People\'s Choice Partner. Implemented design system called Infinite focused on UX patterns for partners\' ecosystem.'
+            },
+            {
+              company: 'ServiceRocket',
+              role: 'Interim Design Manager',
+              period: 'Aug 2022 - Jan 2023',
+              desc: 'Led the entire ServiceRocket design team. Implemented design process with continuous improvement through planning, managing and implementation. Delivered 3 live products for Jira Service Management and Confluence Cloud.'
             },
             {
               company: 'Zensite',
-              role: 'Design Team Lead',
-              desc: 'Guiding a top UX agency across Singapore and Malaysia, delivering exceptional digital experiences for diverse clients.'
+              role: 'Strategy Lead',
+              period: 'Dec 2020 - Present',
+              desc: 'Leading business development and growth. Planning and managing entire sales process. Looking for opportunities for networking and collaboration as a top UX agency across Singapore and Malaysia.'
             },
             {
-              company: 'Community',
-              role: 'Design Leadership Networks',
-              desc: 'Actively engaged in design communities, staying at the forefront of product design trends and leadership best practices.',
+              company: 'ADPList',
+              role: 'Design Mentor (Top 1%)',
+              period: 'Sep 2022 - Present',
+              desc: 'Democratizing mentorship for all. Helping designers learn, grow and find direction in their journey. Top 1% Mentor Recognition in Design, Top 100 Mentors in Design Operations and Service Design.',
               noBorder: true
             }
           ].map((job) => (
-            <div key={job.company} className={job.noBorder ? '' : 'pb-8 border-b border-border'}>
+            <div key={`${job.company}-${job.role}`} className={job.noBorder ? '' : 'pb-8 border-b border-border'}>
               <h3 className="text-base font-medium text-foreground mb-1">{job.company}</h3>
-              <p className="text-sm text-muted-foreground mb-3">{job.role}</p>
+              <p className="text-sm text-muted-foreground mb-1">{job.role}</p>
+              <p className="text-xs text-muted-foreground/70 mb-3">{job.period}</p>
               <p className="text-sm text-muted-foreground leading-relaxed">{job.desc}</p>
             </div>
           ))}
@@ -188,6 +204,46 @@ export function WindowContent({ component, onOpenApp }: WindowContentProps) {
     );
   }
   
+  if (component === 'Folder') {
+    return (
+      <div className="h-full overflow-auto p-10 bg-card">
+        <h2 className="text-2xl font-light mb-8 text-foreground">My Folder</h2>
+        <div className="grid grid-cols-2 gap-4 max-w-2xl">
+          {[
+            { id: 'projects', title: 'Projects', icon: FolderOpen, component: 'Projects' },
+            { id: 'resume', title: 'Resume', icon: FileText, component: 'Resume' }
+          ].map((file) => {
+            const Icon = file.icon;
+            return (
+              <button
+                key={file.id}
+                onClick={() => onOpenApp(file)}
+                className="flex flex-col items-center justify-center p-8 rounded-lg border border-border hover-elevate active-elevate-2 transition-all group"
+                data-testid={`folder-item-${file.id}`}
+              >
+                <Icon className="w-16 h-16 text-muted-foreground/50 group-hover:text-muted-foreground/70 transition-colors mb-4" />
+                <span className="text-sm font-medium text-foreground">{file.title}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  if (component === 'Chat') {
+    return (
+      <div className="h-full flex flex-col bg-card">
+        <iframe
+          src="https://creator.voiceflow.com/share/68f43dd23d6655268bb8623f/production"
+          className="w-full h-full border-0"
+          title="AI Assistant"
+          allow="microphone"
+        />
+      </div>
+    );
+  }
+
   if (component === 'Contact') {
     return (
       <div className="h-full overflow-auto p-10 bg-card">
@@ -235,9 +291,9 @@ export function WindowContent({ component, onOpenApp }: WindowContentProps) {
           <p className="text-xs text-muted-foreground mb-4 uppercase tracking-wider">Connect</p>
           <div className="flex gap-3 flex-wrap">
             {[
-              { name: 'LinkedIn', url: 'https://www.linkedin.com' },
-              { name: 'Dribbble', url: 'https://dribbble.com' },
-              { name: 'Behance', url: 'https://www.behance.net' }
+              { name: 'LinkedIn', url: 'https://www.linkedin.com/in/hakim-nizam' },
+              { name: 'ADPList', url: 'https://adplist.org/mentors/hakim-nizam' },
+              { name: 'Email', url: 'mailto:hakim.nizam93@gmail.com' }
             ].map((social) => (
               <a 
                 key={social.name}

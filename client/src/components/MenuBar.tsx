@@ -85,8 +85,7 @@ export function MenuBar({ time, onOpenApp }: MenuBarProps) {
             >
               {[
                 { id: 'work', title: 'Work Experience', component: 'Work' },
-                { id: 'projects', title: 'Projects', component: 'Projects' },
-                { id: 'resume', title: 'Resume', component: 'Resume' }
+                { id: 'folder', title: 'My Folder', component: 'Folder' }
               ].map((item) => (
                 <button 
                   key={item.id}
@@ -103,7 +102,8 @@ export function MenuBar({ time, onOpenApp }: MenuBarProps) {
               <div className="h-px bg-border my-2"></div>
               {[
                 { id: 'games', title: 'Games', component: 'Games' },
-                { id: 'contact', title: 'Contact', component: 'Contact' }
+                { id: 'contact', title: 'Contact', component: 'Contact' },
+                { id: 'chat', title: 'AI Assistant', component: 'Chat' }
               ].map((item) => (
                 <button 
                   key={item.id}
