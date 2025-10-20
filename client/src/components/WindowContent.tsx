@@ -1,6 +1,6 @@
 import { Gamepad2, FileText, FolderOpen } from 'lucide-react';
 import { useState } from 'react';
-import { OregonTrail } from './games/OregonTrail';
+import { OregonTrailDOS } from './games/OregonTrailDOS';
 
 interface WindowContentProps {
   component: string;
@@ -206,7 +206,7 @@ export function WindowContent({ component, onOpenApp }: WindowContentProps) {
   }
 
   if (component === 'OregonTrail') {
-    return <OregonTrail />;
+    return <OregonTrailDOS />;
   }
   
   if (component === 'Folder') {
