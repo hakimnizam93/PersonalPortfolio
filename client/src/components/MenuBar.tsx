@@ -45,10 +45,11 @@ export function MenuBar({ time, onOpenApp }: MenuBarProps) {
               <h3 className="text-base font-medium text-foreground mb-1">Hakim Nizam</h3>
               <p className="text-sm text-muted-foreground mb-2">Design Leader</p>
               <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                Top 1% ADPList Mentor helping designers navigate career growth, portfolio reviews, and leadership transitions. 5 years of experience crafting user experiences at ServiceRocket and Zensite.
+                Top 1% ADPList Mentor helping designers navigate career growth, portfolio reviews, and leadership transitions. 6 years of experience crafting user experiences at ZUS Coffee, ServiceRocket and Zensite.
               </p>
               <button 
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setShowAboutMenu(false);
                   onOpenApp({ id: 'about', title: 'About', component: 'About' });
                 }}

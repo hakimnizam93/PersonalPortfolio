@@ -14,6 +14,7 @@ interface WindowProps {
   onMaximize: () => void;
   onMouseDown: (e: React.MouseEvent) => void;
   onDragStart: (e: React.MouseEvent) => void;
+  onResizeStart: (e: React.MouseEvent, direction: string) => void;
 }
 
 export function Window({
@@ -29,7 +30,8 @@ export function Window({
   onMinimize,
   onMaximize,
   onMouseDown,
-  onDragStart
+  onDragStart,
+  onResizeStart
 }: WindowProps) {
   return (
     <div
@@ -80,6 +82,36 @@ export function Window({
       <div className="flex-1 overflow-hidden bg-card">
         {children}
       </div>
+
+      {!isMaximized && (
+        <>
+          <div
+            className="absolute bottom-0 right-0 w-4 h-4 cursor-nwse-resize"
+            onMouseDown={(e) => onResizeStart(e, 'se')}
+            data-testid={`resize-handle-se-${id}`}
+          />
+          <div
+            className="absolute bottom-0 left-0 right-0 h-1 cursor-ns-resize"
+            onMouseDown={(e) => onResizeStart(e, 's')}
+            data-testid={`resize-handle-s-${id}`}
+          />
+          <div
+            className="absolute top-0 bottom-0 right-0 w-1 cursor-ew-resize"
+            onMouseDown={(e) => onResizeStart(e, 'e')}
+            data-testid={`resize-handle-e-${id}`}
+          />
+          <div
+            className="absolute bottom-0 left-0 w-4 h-4 cursor-nesw-resize"
+            onMouseDown={(e) => onResizeStart(e, 'sw')}
+            data-testid={`resize-handle-sw-${id}`}
+          />
+          <div
+            className="absolute top-0 bottom-0 left-0 w-1 cursor-ew-resize"
+            onMouseDown={(e) => onResizeStart(e, 'w')}
+            data-testid={`resize-handle-w-${id}`}
+          />
+        </>
+      )}
     </div>
   );
 }

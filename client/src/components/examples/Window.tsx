@@ -15,6 +15,7 @@ export default function WindowExample() {
       onMaximize={() => console.log('Maximize clicked')}
       onMouseDown={() => console.log('Window clicked')}
       onDragStart={() => console.log('Drag started')}
+      onResizeStart={() => console.log('Resize started')}
     >
       <div className="h-full flex items-center justify-center text-muted-foreground">
         Window Content

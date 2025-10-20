@@ -35,6 +35,7 @@ export default function Portfolio() {
   ]);
   const [activeWindow, setActiveWindow] = useState('welcome');
   const [time, setTime] = useState(new Date());
+  const [showMobileWarning, setShowMobileWarning] = useState(false);
   const dragRef = useRef<{ 
     windowId: string | null; 
     startX: number; 
@@ -42,10 +43,29 @@ export default function Portfolio() {
     startWindowX: number; 
     startWindowY: number 
   }>({ windowId: null, startX: 0, startY: 0, startWindowX: 0, startWindowY: 0 });
+  const resizeRef = useRef<{
+    windowId: string | null;
+    direction: string;
+    startX: number;
+    startY: number;
+    startWidth: number;
+    startHeight: number;
+    startLeft: number;
+    startTop: number;
+  }>({ windowId: null, direction: '', startX: 0, startY: 0, startWidth: 0, startHeight: 0, startLeft: 0, startTop: 0 });
 
   useEffect(() => {
     const timer = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setShowMobileWarning(window.innerWidth < 768);
+    };
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
   const apps = [
@@ -153,17 +173,94 @@ export default function Portfolio() {
     dragRef.current = { windowId: null, startX: 0, startY: 0, startWindowX: 0, startWindowY: 0 };
   };
 
+  const startResize = (e: React.MouseEvent, windowId: string, direction: string) => {
+    const win = windows.find(w => w.id === windowId);
+    if (!win || win.isMaximized) return;
+    
+    e.stopPropagation();
+    resizeRef.current = {
+      windowId,
+      direction,
+      startX: e.clientX,
+      startY: e.clientY,
+      startWidth: win.size.width,
+      startHeight: win.size.height,
+      startLeft: win.position.x,
+      startTop: win.position.y
+    };
+    bringToFront(windowId);
+  };
+
+  const onResize = (e: MouseEvent) => {
+    if (!resizeRef.current.windowId) return;
+    
+    const deltaX = e.clientX - resizeRef.current.startX;
+    const deltaY = e.clientY - resizeRef.current.startY;
+    const direction = resizeRef.current.direction;
+    
+    setWindows(windows.map(w => {
+      if (w.id !== resizeRef.current.windowId) return w;
+      
+      let newWidth = resizeRef.current.startWidth;
+      let newHeight = resizeRef.current.startHeight;
+      let newX = resizeRef.current.startLeft;
+      let newY = resizeRef.current.startTop;
+      
+      if (direction.includes('e')) {
+        newWidth = Math.max(300, resizeRef.current.startWidth + deltaX);
+      }
+      if (direction.includes('w')) {
+        newWidth = Math.max(300, resizeRef.current.startWidth - deltaX);
+        newX = resizeRef.current.startLeft + (resizeRef.current.startWidth - newWidth);
+      }
+      if (direction.includes('s')) {
+        newHeight = Math.max(200, resizeRef.current.startHeight + deltaY);
+      }
+      if (direction.includes('n')) {
+        newHeight = Math.max(200, resizeRef.current.startHeight - deltaY);
+        newY = resizeRef.current.startTop + (resizeRef.current.startHeight - newHeight);
+      }
+      
+      return {
+        ...w,
+        size: { width: newWidth, height: newHeight },
+        position: { x: newX, y: newY }
+      };
+    }));
+  };
+
+  const stopResize = () => {
+    resizeRef.current = { windowId: null, direction: '', startX: 0, startY: 0, startWidth: 0, startHeight: 0, startLeft: 0, startTop: 0 };
+  };
+
   useEffect(() => {
     document.addEventListener('mousemove', onDrag);
     document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('mousemove', onResize);
+    document.addEventListener('mouseup', stopResize);
     return () => {
       document.removeEventListener('mousemove', onDrag);
       document.removeEventListener('mouseup', stopDrag);
+      document.removeEventListener('mousemove', onResize);
+      document.removeEventListener('mouseup', stopResize);
     };
   }, [windows]);
 
   return (
     <div className="w-full h-screen bg-background overflow-hidden relative" data-testid="portfolio-container">
+      {showMobileWarning && (
+        <div className="absolute inset-0 bg-background z-[100] flex items-center justify-center p-6">
+          <div className="max-w-md text-center space-y-4">
+            <h1 className="text-2xl font-light text-foreground mb-4">Desktop Experience Required</h1>
+            <p className="text-muted-foreground leading-relaxed">
+              This interactive portfolio is optimized for desktop and tablet devices. Please access this site from a larger screen for the best experience.
+            </p>
+            <p className="text-sm text-muted-foreground/70 mt-6">
+              Minimum screen width: 768px
+            </p>
+          </div>
+        </div>
+      )}
       <div className="absolute inset-0">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -226,6 +323,7 @@ export default function Portfolio() {
           onMaximize={() => maximizeWindow(window.id)}
           onMouseDown={() => bringToFront(window.id)}
           onDragStart={(e) => startDrag(e, window.id)}
+          onResizeStart={(e, direction) => startResize(e, window.id, direction)}
         >
           <WindowContent component={window.component} onOpenApp={openApp} />
         </Window>
